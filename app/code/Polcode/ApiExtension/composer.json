@@ -1,0 +1,22 @@
+{
+    "name": "polcode/module-apiextension",
+    "description": "Customer address management module",
+    "type": "magento2-module",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Mateusz Niziolek",
+            "email": "mateusz.niziolek@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Polcode\\ApiExtension\\": ""
+        },
+        "files": [
+            "registration.php"
+        ]
+    }
+}
