@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Example\GiftItem\Model\Totals;
 
+use Example\GiftItem\Model\GiftItemManager;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Sales\Model\Order\Total\AbstractTotal;
 
@@ -27,6 +28,11 @@ class GiftItemAddressTotal extends AbstractTotal
         return map(function (AbstractItem $item) use ($fn) {
             return is_callable($fn) ? $fn($item) : $item->{$fn}();
         }, filter($items, [$this, 'isGift']));
+    }
 
+    private function isGift(AbstractItem $item)
+    {
+        $option = $item->getOptionByCode(GiftItemManager::OPTION_IS_GIFT);
+        return $option && $option->getValue();
     }
 }
