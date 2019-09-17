@@ -5,10 +5,10 @@ namespace Example\GiftItem\Model\Totals;
 
 use Example\GiftItem\Model\GiftItemManager;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
-use Magento\Sales\Model\Order\Total\AbstractTotal;
-use Magento\Quote\Model\Quote;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Model\Quote\Address\Total;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 
 use function array_filter as filter;
 use function array_map as map;
