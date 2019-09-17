@@ -6,6 +6,9 @@ namespace Example\GiftItem\Model\Totals;
 use Example\GiftItem\Model\GiftItemManager;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Sales\Model\Order\Total\AbstractTotal;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+use Magento\Quote\Model\Quote\Address\Total;
 
 use function array_filter as filter;
 use function array_map as map;
@@ -13,18 +16,14 @@ use function array_sum as sum;
 
 class GiftItemAddressTotal extends AbstractTotal
 {
-    public function collect()
-    {
-//          Subtract gift item row totals sum from subtotal
-//          Subtract gift item base row totals sum from base subtotal
-//          Set calculation_price of every gift item to 0
-//          Set base_calculation_price of every gift item to 0
-//          Call calcRowTotal on each item
-    }
-
     public function getGiftItemTotalSum(AbstractItem ...$items)
     {
         return $this->sumGiftItems('getRowTotal', ...$items);
+    }
+
+    public function getGiftItemBaseTotalSum(AbstractItem ...$items)
+    {
+        return $this->sumGiftItems('getBaseRowTotal', ...$items);
     }
 
     private function sumGiftItems($fn, AbstractItem ...$items)
@@ -43,5 +42,20 @@ class GiftItemAddressTotal extends AbstractTotal
     {
         $option = $item->getOptionByCode(GiftItemManager::OPTION_IS_GIFT);
         return $option && $option->getValue();
+    }
+
+    private function zeroItem(AbstractItem $item)
+    {
+        $item->setData('calculation_price', 0);
+        $item->setData('base_calculation_price', 0);
+        $item->calcRowTotal();
+    }
+    public function collect(Quote $quote, ShippingAssignmentInterface $shippingAssignment, Total $total)
+    {
+        parent::collect($quote, $shippingAssignment, $total);
+        $total->addTotalAmount('subtotal', -1 * $this->getGiftItemTotalSum(...$shippingAssignment->getItems()));
+        $total->addBaseTotalAmount('subtotal', -1 * $this->getGiftItemBaseTotalSum(...$shippingAssignment->getItems()));
+        $this->mapGiftItems([$this, 'zeroItem'], ...$shippingAssignment->getItems());
+        return $this;
     }
 }

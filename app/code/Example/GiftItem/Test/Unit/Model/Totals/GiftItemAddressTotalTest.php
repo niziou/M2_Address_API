@@ -71,4 +71,26 @@ class GiftItemAddressTotalTest extends TestCase
 
         return $giftItem;
     }
+
+    public function testReturnsSumOfGiftItemTotalsOnly()
+    {
+        $items = [
+           $this->createItemWithRowTotal(1),
+           $this->createItemWithRowTotal(2),
+           $this->createGiftItemWithRowTotal(4),
+           $this->createGiftItemWithRowTotal(8),
+        ];
+        $this->assertSame(12, (new GiftItemAddressTotal())->getGiftItemTotalSum(...$items));
+    }
+
+    public function testReturnsSumOfGiftItemBaseTotalsOnly()
+    {
+        $items = [
+            $this->createItemWithRowTotal(0, 2),
+            $this->createItemWithRowTotal(0, 4),
+            $this->createGiftItemWithRowTotal(0, 8),
+            $this->createGiftItemWithRowTotal(0, 16),
+        ];
+        $this->assertSame(24, (new GiftItemAddressTotal())->getGiftItemBaseTotalSum(...$items));
+    }
 }
