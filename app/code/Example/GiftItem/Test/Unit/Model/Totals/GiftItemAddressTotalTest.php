@@ -50,4 +50,25 @@ class GiftItemAddressTotalTest extends TestCase
         $nonGiftItem = $this->createItemWithRowTotal(10);
         $this->assertSame(0, (new GiftItemAddressTotal())->getGiftItemTotalSum($nonGiftItem));
     }
+
+    public function testReturnsGiftItemRowTotal()
+    {
+        $rowTotal = 6;
+        $giftItem = $this->createGiftItemWithRowTotal($rowTotal);
+        $this->assertSame($rowTotal, (new GiftItemAddressTotal())->getGiftItemTotalSum($giftItem));
+    }
+
+    /**
+     * @param int|float $rowTotal
+     * @return Quote\Item\AbstractItem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    public function createGiftItemWithRowTotal($rowTotal, $baseRowTotal = null): Quote\Item\AbstractItem
+    {
+        $option = $this->createMock(Quote\Item\Option::class);
+        $option->method('getValue')->willReturn(1);
+        $giftItem = $this->createItemWithRowTotal($rowTotal, $baseRowTotal);
+        $giftItem->method('getOptionByCode')->with(GiftItemManager::OPTION_IS_GIFT)->willReturn($option);
+
+        return $giftItem;
+    }
 }
