@@ -8,5 +8,8 @@ use PHPUnit\Framework\TestCase;
 
 class AddressManagementTest extends TestCase
 {
+    public function testGet()
+    {
 
+    }
 }
