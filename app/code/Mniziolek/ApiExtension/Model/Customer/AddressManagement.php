@@ -3,6 +3,8 @@
 
 namespace Mniziolek\ApiExtension\Model\Customer;
 
+use \Magento\Customer\Api\AddressRepositoryInterface;
+
 use Mniziolek\ApiExtension\Api\Customer\AddressManagementInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -13,7 +15,7 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Model\AddressRegistry;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Api\AddressRepositoryInterface;
+
 use Magento\Customer\Model\AddressFactory;
 
 
@@ -86,6 +88,8 @@ class AddressManagement implements AddressManagementInterface
     }
 
     /**
+     *
+     * Tak na prawde getList
      * {@inheritdoc}
      */
     public function search($customerId, SearchCriteriaInterface $searchCriteria = null)
@@ -117,24 +121,19 @@ class AddressManagement implements AddressManagementInterface
         return $searchResults;
     }
     /**
-     * {@inheritdoc}
+     * @param int $customerId
+     * @param int $addressId
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return \Magento\Customer\Api\Data\AddressInterface
      */
     public function get($customerId, $addressId)
     {
-        $collection = $this->addressCollectionFactory->create();
-        $this->extensionAttributesJoinProcessor->process(
-            $collection,
-            AddressInterface::class
-        );
-        $collection->addFieldToFilter('parent_id', $customerId);
-        $collection->addFieldToFilter('entity_id', $addressId);
-        /** @var \Magento\Customer\Model\Address $address */
-        $address = [];
-        foreach ($collection->getItems() as $address) {
-            $address = $this->getById($address->getId());
-        }
+        $address = $this->addressRepository->getById($addressId);
         if (is_array($address)) {
             throw new NoSuchEntityException(__('Address with id "%1" does not exist.', $addressId));
+        }
+        if($address->getCustomerId() !== $customerId) {
+            throw new NoSuchEntityException(__('Address doesn\'t belong to the customer'));
         }
         return $address;
     }
