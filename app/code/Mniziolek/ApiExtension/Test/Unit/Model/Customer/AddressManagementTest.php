@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Polcode\ApiExtension\Model\Customer;
+namespace Mniziolek\ApiExtension\Model\Customer;
 
 use PHPUnit\Framework\TestCase;
 
