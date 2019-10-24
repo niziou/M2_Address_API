@@ -1,5 +1,5 @@
 {
-    "name": "polcode/module-apiextension",
+    "name": "mniziolek/module-apiextension",
     "description": "Customer address management module",
     "type": "magento2-module",
     "license": "proprietary",
@@ -13,7 +13,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "Polcode\\ApiExtension\\": ""
+            "Mniziolek\\ApiExtension\\": ""
         },
         "files": [
             "registration.php"

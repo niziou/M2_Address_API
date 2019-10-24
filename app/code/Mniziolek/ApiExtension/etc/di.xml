@@ -1,8 +1,4 @@
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-	<preference for="Polcode\ApiExtension\Api\Customer\AddressManagementInterface" type="Polcode\ApiExtension\Model\Customer\AddressManagement"/>
-	<preference for="Polcode\ApiExtension\Api\Customer\AppendCustomerAddressInteface" type="Polcode\ApiExtension\Model\Customer\AppendCustomerAddress"/>
-	<preference for="Polcode\ApiExtension\Api\Customer\SearchCustomerAddressInterface" type="Polcode\ApiExtension\Model\Customer\SearchCustomerAddress"/>
-	<preference for="Polcode\ApiExtension\Api\Customer\GetCustomerAddressInterface" type="Polcode\ApiExtension\Model\Customer\GetCustomerAddress"/>
-	<preference for="Polcode\ApiExtension\Api\Customer\CustomerAddressBuilderInterface" type="Polcode\ApiExtension\Model\Customer\CustomerAddressBuilder"/>
+	<preference for="Mniziolek\ApiExtension\Api\Customer\AddressManagementInterface" type="Mniziolek\ApiExtension\Model\Customer\AddressManagement"/>
 </config>

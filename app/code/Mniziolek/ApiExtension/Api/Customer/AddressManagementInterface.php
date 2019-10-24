@@ -1,5 +1,5 @@
 <?php
-namespace Polcode\ApiExtension\Api\Customer;
+namespace Mniziolek\ApiExtension\Api\Customer;
 
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;

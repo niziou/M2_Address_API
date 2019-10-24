@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
-	<route method="GET" url="/V1/polcode-apiextension/address/mine">
-		<service class="Polcode\ApiExtension\Api\Customer\AddressManagementInterface" method="search"/>
+	<route method="GET" url="/V1/mniziolek-apiextension/address/mine">
+		<service class="Mniziolek\ApiExtension\Api\Customer\AddressManagementInterface" method="search"/>
 		<resources>
 			<resource ref="self"/>
 		</resources>
@@ -9,8 +9,8 @@
 			<parameter name="customerId" force="true">%customer_id%</parameter>
 		</data>
 	</route>
-	<route method="GET" url="/V1/polcode-apiextension/address/mine/:addressId">
-		<service class="Polcode\ApiExtension\Api\Customer\AddressManagementInterface" method="get"/>
+	<route method="GET" url="/V1/mniziolek-apiextension/address/mine/:addressId">
+		<service class="Mniziolek\ApiExtension\Api\Customer\AddressManagementInterface" method="get"/>
 		<resources>
 			<resource ref="self"/>
 		</resources>
@@ -18,8 +18,8 @@
 			<parameter name="customerId" force="true">%customer_id%</parameter>
 		</data>
 	</route>
-	<route method="POST" url="/V1/polcode-apiextension/address/mine">
-		<service class="Polcode\ApiExtension\Api\Customer\AddressManagementInterface" method="create"/>
+	<route method="POST" url="/V1/mniziolek-apiextension/address/mine">
+		<service class="Mniziolek\ApiExtension\Api\Customer\AddressManagementInterface" method="create"/>
 		<resources>
 			<resource ref="self"/>
 		</resources>
@@ -27,8 +27,8 @@
 			<parameter name="customerId" force="true">%customer_id%</parameter>
 		</data>
 	</route>
-	<route method="PUT" url="/V1/polcode-apiextension/address/mine/:addressId">
-		<service class="Polcode\ApiExtension\Api\Customer\AddressManagementInterface" method="update"/>
+	<route method="PUT" url="/V1/mniziolek-apiextension/address/mine/:addressId">
+		<service class="Mniziolek\ApiExtension\Api\Customer\AddressManagementInterface" method="update"/>
 		<resources>
 			<resource ref="self"/>
 		</resources>
@@ -36,8 +36,8 @@
 			<parameter name="customerId" force="true">%customer_id%</parameter>
 		</data>
 	</route>
-	<route method="DELETE" url="/V1/polcode-apiextension/address/mine/:addressId">
-		<service class="Polcode\ApiExtension\Api\Customer\AddressManagementInterface" method="delete"/>
+	<route method="DELETE" url="/V1/mniziolek-apiextension/address/mine/:addressId">
+		<service class="Mniziolek\ApiExtension\Api\Customer\AddressManagementInterface" method="delete"/>
 		<resources>
 			<resource ref="self"/>
 		</resources>

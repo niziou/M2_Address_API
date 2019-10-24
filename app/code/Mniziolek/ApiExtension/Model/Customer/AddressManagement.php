@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Polcode\ApiExtension\Model\Customer;
+namespace Mniziolek\ApiExtension\Model\Customer;
 
-use Polcode\ApiExtension\Api\Customer\AddressManagementInterface;
+use Mniziolek\ApiExtension\Api\Customer\AddressManagementInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressSearchResultsInterfaceFactory;
