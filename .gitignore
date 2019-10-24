@@ -2,6 +2,7 @@
 /app/*
 !/app/**/
 !/app/code/Polcode/**
+!/app/code/Example/**
 /app/etc/*
 /bin/*
 /dev/*
