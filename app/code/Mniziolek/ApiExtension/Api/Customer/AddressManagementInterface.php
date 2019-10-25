@@ -17,6 +17,7 @@ interface AddressManagementInterface
      * @param int $customerId
      * @param int $addressId
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\AuthorizationException
      * @return \Magento\Customer\Api\Data\AddressInterface
      */
     public function get($customerId, $addressId);
