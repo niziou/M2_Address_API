@@ -1,7 +1,7 @@
 /.modman/
 /app/*
 !/app/**/
-!/app/code/Polcode/**
+!/app/code/Mniziolek/**
 !/app/code/Example/**
 /app/etc/*
 /bin/*
