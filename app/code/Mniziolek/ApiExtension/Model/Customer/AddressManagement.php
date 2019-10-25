@@ -5,6 +5,7 @@ namespace Mniziolek\ApiExtension\Model\Customer;
 
 use \Magento\Customer\Api\AddressRepositoryInterface;
 
+use Magento\Framework\Exception\LocalizedException;
 use Mniziolek\ApiExtension\Api\Customer\AddressManagementInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -15,10 +16,16 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Model\AddressRegistry;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\AuthorizationException;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
 
 use Magento\Customer\Model\AddressFactory;
 
 
+/**
+ * Class AddressManagement
+ * @package Mniziolek\ApiExtension\Model\Customer
+ */
 class AddressManagement implements AddressManagementInterface
 {
     /**
@@ -49,9 +56,27 @@ class AddressManagement implements AddressManagementInterface
      * @var SearchCriteriaInterface
      */
     protected $searchCriteriaEmpty;
+    /**
+     * @var \Magento\Customer\Model\ResourceModel\Address
+     */
+    protected $addressResourceModel;
+
+    /**
+     * @var AddressRepositoryInterface
+     */
     protected $addressRepository;
+    /**
+     * @var AddressFactory
+     */
     protected $addressFactory;
+    /**
+     * @var
+     */
     protected $addressInterfaceFactory;
+    /**
+     * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
+     */
+    protected $addressDataFactory;
 
     /**
      * AddressManagement constructor.
@@ -73,7 +98,8 @@ class AddressManagement implements AddressManagementInterface
         JoinProcessorInterface $joinProcessor,
         AddressRegistry $addressRegistry,
         AddressRepositoryInterface $addressRepository,
-        AddressFactory $addressFactory
+        AddressFactory $addressFactory,
+        AddressInterfaceFactory $addressDataFactory
     )
     {
         $this->customerRepository = $customerRegistry;
@@ -85,11 +111,12 @@ class AddressManagement implements AddressManagementInterface
         $this->searchCriteriaEmpty = $searchCriteria;
         $this->addressRepository = $addressRepository;
         $this->addressFactory = $addressFactory;
+        $this->addressDataFactory = $addressDataFactory;
     }
 
     /**
      *
-     * Tak na prawde getList
+     * Similar to getList from AddressRepository
      * {@inheritdoc}
      */
     public function search($customerId, SearchCriteriaInterface $searchCriteria = null)
@@ -133,7 +160,7 @@ class AddressManagement implements AddressManagementInterface
             throw new NoSuchEntityException(__('Address with id "%1" does not exist.', $addressId));
         }
         if($address->getCustomerId() !== $customerId) {
-            throw new NoSuchEntityException(__('Address doesn\'t belong to the customer'));
+            throw new AuthorizationException(__('Address doesn\'t belong to the customer'));
         }
         return $address;
     }
@@ -146,13 +173,13 @@ class AddressManagement implements AddressManagementInterface
         $address = $this->addressFactory->create();
         $address->updateData($addressData);
         $address->setCustomerId($customerId);
+        $addressData->setCustomerId($customerId);
         if(!$address->validate()) {
             throw new InputException(
-                __("AddressData is not valid, it has to be type \Magento\Customer\Api\Data\AddressInterface")
+                __("AddressData is not valid")
             );
         }
-        $address->save();
-        $addressData = $this->get($customerId, $address->getId());
+        $addressData = $this->addressRepository->save($addressData);
         return $addressData;
     }
 
@@ -177,9 +204,9 @@ class AddressManagement implements AddressManagementInterface
      */
     public function delete($customerId, $addressId)
     {
-        /** Checks if address belongs to this customer */
-        $this->get($customerId,$addressId);
-        return $this->addressRepository->deleteById($addressId);
+        /** Get method checks if address belongs to customer */
+        $address = $this->get($customerId,$addressId);
+        return $this->addressRepository->delete($address);
     }
 
     /**
@@ -191,7 +218,7 @@ class AddressManagement implements AddressManagementInterface
      */
     private function getById($addressId)
     {
-        $address = $this->addressRegistry->retrieve($addressId);
-        return $address->getDataModel();
+        $address = $this->addressRepository->getById($addressId);
+        return $address;
     }
 }
