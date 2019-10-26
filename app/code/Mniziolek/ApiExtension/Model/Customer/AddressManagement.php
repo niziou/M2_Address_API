@@ -136,7 +136,7 @@ class AddressManagement implements AddressManagementInterface
         $addresses = [];
         /** @var \Magento\Customer\Model\Address $address */
         foreach ($collection->getItems() as $address) {
-            $addresses[] = $this->getById($address->getId());
+            $addresses[] = $address;
         }
         /** @var \Magento\Customer\Api\Data\AddressSearchResultsInterface $searchResults */
         $searchResults = $this->addressSearchResultsFactory->create();
@@ -159,8 +159,8 @@ class AddressManagement implements AddressManagementInterface
         if (is_array($address)) {
             throw new NoSuchEntityException(__('Address with id "%1" does not exist.', $addressId));
         }
-        if($address->getCustomerId() !== $customerId) {
-            throw new AuthorizationException(__('Address doesn\'t belong to the customer'));
+        if(intval($address->getCustomerId()) !== intval($customerId)) {
+            throw new AuthorizationException(__('Address doesn\'t belong to the customer "%1"', $customerId));
         }
         return $address;
     }
@@ -173,12 +173,12 @@ class AddressManagement implements AddressManagementInterface
         $address = $this->addressFactory->create();
         $address->updateData($addressData);
         $address->setCustomerId($customerId);
-        $addressData->setCustomerId($customerId);
         if(!$address->validate()) {
             throw new InputException(
                 __("AddressData is not valid")
             );
         }
+        $addressData->setCustomerId($customerId);
         $addressData = $this->addressRepository->save($addressData);
         return $addressData;
     }
