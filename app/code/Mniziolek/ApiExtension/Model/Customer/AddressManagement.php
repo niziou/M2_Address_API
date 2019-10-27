@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 
 namespace Mniziolek\ApiExtension\Model\Customer;
 
@@ -132,7 +132,7 @@ class AddressManagement implements AddressManagementInterface
         } else {
             $this->collectionProcessor->process($searchCriteria, $collection);
         }
-        /** @var \Magento\Customer\Api\Data\AddressInterface[] $addresses */
+        /** @var AddressInterface[] $addresses */
         $addresses = [];
         /** @var \Magento\Customer\Model\Address $address */
         foreach ($collection->getItems() as $address) {
@@ -150,8 +150,8 @@ class AddressManagement implements AddressManagementInterface
     /**
      * @param int $customerId
      * @param int $addressId
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Magento\Customer\Api\Data\AddressInterface
+     * @return AddressInterface
+     * @throws LocalizedException
      */
     public function get($customerId, $addressId)
     {
@@ -166,7 +166,11 @@ class AddressManagement implements AddressManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $customerId
+     * @param AddressInterface $addressData
+     * @return AddressInterface
+     * @throws LocalizedException
+     * @throws InputException
      */
     public function create($customerId, $addressData)
     {
@@ -184,10 +188,14 @@ class AddressManagement implements AddressManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $customerId
+     * @param int $addressId
+     * @param AddressInterface $addressData
+     * @return AddressInterface
+     * @throws LocalizedException
      */
     public function update($customerId, $addressId, $addressData)
-    {
+    {// type hinty,
         $addressData->setId($addressId);
         $address = $this->addressFactory->create();
         $address->load($addressId);
@@ -200,25 +208,15 @@ class AddressManagement implements AddressManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $customerId
+     * @param int $addressId
+     * @return bool
+     * @throws LocalizedException
      */
     public function delete($customerId, $addressId)
     {
         /** Get method checks if address belongs to customer */
         $address = $this->get($customerId,$addressId);
         return $this->addressRepository->delete($address);
-    }
-
-    /**
-     * Retrieve customer address.
-     *
-     * @param int $addressId
-     * @return \Magento\Customer\Api\Data\AddressInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function getById($addressId)
-    {
-        $address = $this->addressRepository->getById($addressId);
-        return $address;
     }
 }
