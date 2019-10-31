@@ -1,95 +1,77 @@
 <?php
-
+declare(strict_types=1);
 
 namespace Mniziolek\ApiExtension\Model\Customer;
 
-use \Magento\Customer\Api\AddressRepositoryInterface;
-
-use Mniziolek\ApiExtension\Api\Customer\AddressManagementInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\AddressSearchResultsInterfaceFactory;
+use Magento\Customer\Model\AddressFactory;
+use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Customer\Model\AddressRegistry;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Mniziolek\ApiExtension\Api\Customer\AddressManagementInterface;
 
-use Magento\Customer\Model\AddressFactory;
 
-
+/**
+ * Class AddressManagement
+ * @package Mniziolek\ApiExtension\Model\Customer
+ */
 class AddressManagement implements AddressManagementInterface
 {
     /**
-     * @var \Magento\Customer\Model\AddressRegistry
+     * @var AddressRepositoryInterface
      */
-    protected $addressRegistry;
+    protected $addressRepository;
     /**
      * @var \Magento\Customer\Api\Data\AddressSearchResultsInterfaceFactory
      */
     protected $addressSearchResultsFactory;
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Address\CollectionFactory
+     * @var CollectionFactory
      */
     protected $addressCollectionFactory;
-    /**
-     * @var CustomerRepositoryInterface
-     */
-    protected $customerRepository;
     /**
      * @var CollectionProcessorInterface
      */
     private $collectionProcessor;
     /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     * @var JoinProcessorInterface
      */
     protected $extensionAttributesJoinProcessor;
-    /**
-     * @var SearchCriteriaInterface
-     */
-    protected $searchCriteriaEmpty;
-    protected $addressRepository;
-    protected $addressFactory;
-    protected $addressInterfaceFactory;
 
     /**
      * AddressManagement constructor.
-     * @param CustomerRepositoryInterface $customerRegistry
-     * @param AddressSearchResultsInterfaceFactory $addressSearchResultsFactory
-     * @param \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressCollectionFactory
-     * @param SearchCriteriaInterface $searchCriteria
-     * @param CollectionProcessorInterface $collectionProcessor
-     * @param JoinProcessorInterface $joinProcessor
-     * @param AddressRegistry $addressRegistry
      * @param AddressRepositoryInterface $addressRepository
+     * @param AddressSearchResultsInterfaceFactory $addressSearchResultsFactory
+     * @param CollectionFactory $addressCollectionFactory
+     * @param CollectionProcessorInterface $collectionProcessor
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      */
     public function __construct(
-        CustomerRepositoryInterface $customerRegistry,
-        AddressSearchResultsInterfaceFactory $addressSearchResultsFactory,
-        \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressCollectionFactory,
-        \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria,
-        CollectionProcessorInterface $collectionProcessor,
-        JoinProcessorInterface $joinProcessor,
-        AddressRegistry $addressRegistry,
         AddressRepositoryInterface $addressRepository,
-        AddressFactory $addressFactory
+        AddressSearchResultsInterfaceFactory $addressSearchResultsFactory,
+        CollectionFactory $addressCollectionFactory,
+        CollectionProcessorInterface $collectionProcessor,
+        JoinProcessorInterface $extensionAttributesJoinProcessor
     )
     {
-        $this->customerRepository = $customerRegistry;
+        $this->addressRepository = $addressRepository;
         $this->addressSearchResultsFactory = $addressSearchResultsFactory;
         $this->addressCollectionFactory = $addressCollectionFactory;
         $this->collectionProcessor = $collectionProcessor;
-        $this->extensionAttributesJoinProcessor = $joinProcessor;
-        $this->addressRegistry = $addressRegistry;
-        $this->searchCriteriaEmpty = $searchCriteria;
-        $this->addressRepository = $addressRepository;
-        $this->addressFactory = $addressFactory;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
     }
 
     /**
      *
-     * Tak na prawde getList
+     * Similar to getList from AddressRepository
      * {@inheritdoc}
      */
     public function search($customerId, SearchCriteriaInterface $searchCriteria = null)
@@ -105,11 +87,11 @@ class AddressManagement implements AddressManagementInterface
         } else {
             $this->collectionProcessor->process($searchCriteria, $collection);
         }
-        /** @var \Magento\Customer\Api\Data\AddressInterface[] $addresses */
+        /** @var AddressInterface[] $addresses */
         $addresses = [];
         /** @var \Magento\Customer\Model\Address $address */
         foreach ($collection->getItems() as $address) {
-            $addresses[] = $this->getById($address->getId());
+            $addresses[] = $address;
         }
         /** @var \Magento\Customer\Api\Data\AddressSearchResultsInterface $searchResults */
         $searchResults = $this->addressSearchResultsFactory->create();
@@ -123,75 +105,62 @@ class AddressManagement implements AddressManagementInterface
     /**
      * @param int $customerId
      * @param int $addressId
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Magento\Customer\Api\Data\AddressInterface
+     * @return AddressInterface
+     * @throws LocalizedException
      */
-    public function get($customerId, $addressId)
+    public function get(int $customerId, int $addressId)
     {
         $address = $this->addressRepository->getById($addressId);
         if (is_array($address)) {
             throw new NoSuchEntityException(__('Address with id "%1" does not exist.', $addressId));
         }
-        if($address->getCustomerId() !== $customerId) {
-            throw new NoSuchEntityException(__('Address doesn\'t belong to the customer'));
+        if(intval($address->getCustomerId()) !== intval($customerId)) {
+            throw new AuthorizationException(__('Address doesn\'t belong to the customer "%1"', $customerId));
         }
         return $address;
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $customerId
+     * @param AddressInterface $addressData
+     * @return AddressInterface
+     * @throws LocalizedException
+     * @throws InputException
      */
-    public function create($customerId, $addressData)
+    public function create(int $customerId,AddressInterface $addressData)
     {
-        $address = $this->addressFactory->create();
-        $address->updateData($addressData);
-        $address->setCustomerId($customerId);
-        if(!$address->validate()) {
-            throw new InputException(
-                __("AddressData is not valid, it has to be type \Magento\Customer\Api\Data\AddressInterface")
-            );
-        }
-        $address->save();
-        $addressData = $this->get($customerId, $address->getId());
+        $addressData->setCustomerId($customerId);
+        $addressData = $this->addressRepository->save($addressData);
         return $addressData;
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function update($customerId, $addressId, $addressData)
-    {
-        $addressData->setId($addressId);
-        $address = $this->addressFactory->create();
-        $address->load($addressId);
-        $address->updateData($addressData);
-        $address->validate();
-        $address->save();
-
-        $addressData = $this->get($customerId, $addressId);
-        return $addressData;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function delete($customerId, $addressId)
-    {
-        /** Checks if address belongs to this customer */
-        $this->get($customerId,$addressId);
-        return $this->addressRepository->deleteById($addressId);
-    }
-
-    /**
-     * Retrieve customer address.
-     *
+     * @param int $customerId
      * @param int $addressId
-     * @return \Magento\Customer\Api\Data\AddressInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param AddressInterface $addressData
+     * @return AddressInterface
+     * @throws LocalizedException
      */
-    private function getById($addressId)
+    public function update(int $customerId,int $addressId, AddressInterface $addressData)
     {
-        $address = $this->addressRegistry->retrieve($addressId);
-        return $address->getDataModel();
+        /** Get method checks if address belongs to customer */
+        $address = $this->get($customerId,$addressId);
+        $addressData->setId($addressId);
+        $addressData->setCustomerId($customerId);
+        $this->addressRepository->save($addressData);
+        return $addressData;
+    }
+
+    /**
+     * @param int $customerId
+     * @param int $addressId
+     * @return bool
+     * @throws LocalizedException
+     */
+    public function delete(int $customerId, int $addressId): bool
+    {
+        /** Get method checks if address belongs to customer */
+        $address = $this->get($customerId,$addressId);
+        return $this->addressRepository->delete($address);
     }
 }
