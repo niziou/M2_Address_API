@@ -11,7 +11,7 @@ interface AddressManagementInterface
      * @param SearchCriteriaInterface|null $searchCriteria
      * @return \Magento\Customer\Api\Data\AddressSearchResultsInterface
      */
-    public function search($customerId, SearchCriteriaInterface $searchCriteria = null);
+    public function search(int $customerId, SearchCriteriaInterface $searchCriteria = null);
 
     /**
      * @param int $customerId
@@ -20,7 +20,7 @@ interface AddressManagementInterface
      * @throws \Magento\Framework\Exception\AuthorizationException
      * @return \Magento\Customer\Api\Data\AddressInterface
      */
-    public function get($customerId, $addressId);
+    public function get(int $customerId, int $addressId);
 
     /**
      * @param int $customerId
@@ -28,7 +28,7 @@ interface AddressManagementInterface
      * @throws \Magento\Framework\Exception\InputException
      * @return \Magento\Customer\Api\Data\AddressInterface
      */
-    public function create($customerId, $addressData);
+    public function create(int $customerId, AddressInterface $addressData);
 
     /**
      * @param int $customerId
@@ -38,7 +38,7 @@ interface AddressManagementInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return \Magento\Customer\Api\Data\AddressInterface
      */
-    public function update($customerId, $addressId, $addressData);
+    public function update(int $customerId, int $addressId, AddressInterface $addressData);
 
     /**
      * @param int $customerId
@@ -47,5 +47,5 @@ interface AddressManagementInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
      */
-    public function delete($customerId, $addressId);
+    public function delete(int $customerId, int $addressId);
 }
