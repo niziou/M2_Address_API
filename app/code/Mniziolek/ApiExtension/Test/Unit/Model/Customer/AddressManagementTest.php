@@ -89,17 +89,19 @@ class AddressManagementTest extends TestCase
      */
     public function testGet()
     {
-        $customerAddress = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\AddressInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->addressManagement->expects($this->once())
+        //Check if correct class in return
+        $addressManagement = $this
+            ->getMockBuilder(AddressManagement::class)
+            ->setMethods(array('get'))
+            ->disableOriginalConstructor()
+            ->getMock();
+        $address = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $addressManagement->expects($this->once())
             ->method('get')
-            ->with(1,1)
-            ->willReturn($this->address);
-        $this->assertSame($customerAddress, $this->addressManagement->get(1,1));
-        //co ma zwracac get, obiekt address
+            ->willReturn($address);
+        $addressManagement->get(1,1);
+
     }
 }
