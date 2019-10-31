@@ -108,7 +108,7 @@ class AddressManagement implements AddressManagementInterface
      * @return AddressInterface
      * @throws LocalizedException
      */
-    public function get(int $customerId, int $addressId): AddressInterface
+    public function get(int $customerId, int $addressId)
     {
         $address = $this->addressRepository->getById($addressId);
         if (is_array($address)) {
@@ -127,7 +127,7 @@ class AddressManagement implements AddressManagementInterface
      * @throws LocalizedException
      * @throws InputException
      */
-    public function create(int $customerId,AddressInterface $addressData): AddressInterface
+    public function create(int $customerId,AddressInterface $addressData)
     {
         $addressData->setCustomerId($customerId);
         $addressData = $this->addressRepository->save($addressData);
@@ -141,8 +141,10 @@ class AddressManagement implements AddressManagementInterface
      * @return AddressInterface
      * @throws LocalizedException
      */
-    public function update(int $customerId,int $addressId, AddressInterface $addressData): AddressInterface
+    public function update(int $customerId,int $addressId, AddressInterface $addressData)
     {
+        /** Get method checks if address belongs to customer */
+        $address = $this->get($customerId,$addressId);
         $addressData->setId($addressId);
         $addressData->setCustomerId($customerId);
         $this->addressRepository->save($addressData);
