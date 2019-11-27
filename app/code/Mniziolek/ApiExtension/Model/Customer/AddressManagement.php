@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Mniziolek_ApiExtension
+ * @author Mateusz Niziołek <mateusz.niziolek@gmail.com>
+ */
 declare(strict_types=1);
 
 namespace Mniziolek\ApiExtension\Model\Customer;
@@ -20,7 +24,7 @@ use Mniziolek\ApiExtension\Api\Customer\AddressManagementInterface;
 
 
 /**
- * Class AddressManagement
+ * Class AddressManagement API Repository like access V1
  * @package Mniziolek\ApiExtension\Model\Customer
  */
 class AddressManagement implements AddressManagementInterface
