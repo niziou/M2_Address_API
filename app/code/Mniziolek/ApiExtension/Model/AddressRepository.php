@@ -6,12 +6,27 @@ namespace Mniziolek\ApiExtension\Model;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Mniziolek\ApiExtension\Api\Customer\AddressManagementInterface;
+use Mniziolek\ApiExtension\Model\Address\Query\Get;
 
 class AddressRepository implements AddressManagementInterface
 {
-    public function get(int $customerId, int $addressId)
+    private $getQuery;
+    public function __construct(
+        Get $getQuery
+    )
     {
-        // TODO: Implement get() method.
+
+    }
+    /**
+     * Get Address Entity By ID
+     *
+     * @param int $customerId
+     * @param int $addressId
+     * @return AddressInterface
+     */
+    public function get(int $customerId, int $addressId): AddressInterface
+    {
+        return $this->getQuery->execute($customerId, $addressId);
     }
 
     public function search(int $customerId, SearchCriteriaInterface $searchCriteria = null)
@@ -19,12 +34,12 @@ class AddressRepository implements AddressManagementInterface
         // TODO: Implement search() method.
     }
 
-    public function create(int $customerId, AddressInterface $addressData)
+    public function create(int $customerId, AddressInterface $addressData): void
     {
         // TODO: Implement create() method.
     }
 
-    public function delete(int $customerId, int $addressId)
+    public function delete(int $customerId, int $addressId): void
     {
         // TODO: Implement delete() method.
     }
