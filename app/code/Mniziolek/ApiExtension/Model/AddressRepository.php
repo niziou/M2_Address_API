@@ -31,21 +31,21 @@ class AddressRepository implements AddressManagementInterface
 
     public function search(int $customerId, SearchCriteriaInterface $searchCriteria = null)
     {
-        // TODO: Implement search() method.
+        return $this->searchQuery->execute($customerId, $searchCriteria);
     }
 
     public function create(int $customerId, AddressInterface $addressData): void
     {
-        // TODO: Implement create() method.
+        return $this->createCommand->execute($customerId, $addressData);
     }
 
     public function delete(int $customerId, int $addressId): void
     {
-        // TODO: Implement delete() method.
+        return $this->deleteCommand->execute($customerId, $addressId);
     }
 
     public function update(int $customerId, int $addressId, AddressInterface $addressData)
     {
-        // TODO: Implement update() method.
+        return $this->updateCommand->execute($customerId, $addressId, $addressData);
     }
 }
