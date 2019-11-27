@@ -10,6 +10,7 @@ namespace Mniziolek\ApiExtension\Test\Unit\Model\Customer;
 use Assert\Assert;
 use Magento\Customer\Api\Data\AddressSearchResultsInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Mniziolek\ApiExtension\Model\Address\Query\GetInterface;
 use Mniziolek\ApiExtension\Model\Address\Query\SearchInterface;
 use Mniziolek\ApiExtension\Model\Address\Command\DeleteInterface;
@@ -104,8 +105,8 @@ class AddressRepositoryTest extends TestCase
     }
 
     /**
-     *
-     * @throws NoSuchEntityException
+     * @expectedException NoSuchEntityException
+     * @expectedExceptionMessage No Example Entity Exists With Entity ID specified
      */
     public function testGetWithNoSuchEntityException()
     {
@@ -116,8 +117,120 @@ class AddressRepositoryTest extends TestCase
             ->method('execute')
             ->with($customerId, $entityId)
             ->willThrowException(
-                new NoSuchEntityException(__("No address entity exists with entity ID spcified"))
+                new NoSuchEntityException(__("No Example Entity Exists With Entity ID specified"))
             );
         $this->addressRepository->get($customerId, $entityId);
+    }
+
+    /**
+     * Test getList() successfully calls GetList::execute and returns expceted ExampleSearchResults
+     */
+    public function testSearchWithSearchCriteria()
+    {
+        $customerId = 1;
+        $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)->getMock();
+        $this->searchQuery()
+            ->expects($this->once())
+            ->method('execute')
+            ->with($searchCriteria)
+            ->willReturn($this->searchResults);
+        $this->assertEquals(
+            $this->searchResults,
+            $this->addressRepository->search($customerId, $searchCriteria)
+        );
+    }
+
+    /**
+     * Test getList() successfully calls GetList::execute and returns expceted ExampleSearchResults
+     */
+    public function testSearchWithoutSearchCriteria()
+    {
+        $customerId = 1;
+        $this->searchQuery
+            ->expects($this->once())
+            ->method('execute')
+            ->with($customerId, null)
+            ->willReturn($this->searchResults);
+        $this->assertEquals(
+            $this->searchResults,
+            $this->addressRepository->search($customerId, null)
+        );
+    }
+
+    /**
+     * @expectedException CouldNotDeleteException
+     * @expectedExceptionMessage Could Not Delete Example Entity
+     */
+    public function testDeleteWithCouldNotDeleteException()
+    {
+        $customerId = 1;
+        $addressId = 1;
+        $this->deleteCommand
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->address)
+            ->willThrowException(
+                new CouldNotDeleteException(__('Could Not Delete Example Entity'))
+            );
+        $this->addressRepository->delete($customerId, $addressId);
+    }
+
+    /**
+     * @expectedException NoSuchEntityException
+     * @expectedExceptionMessage Could Not Delete Example Entity as No Entity Exists with Id
+     */
+    public function testDeleteWithNoSuchEntityException()
+    {
+        $customerId = 1;
+        $addressId = 1;
+        $this->deleteCommand
+            ->expects($this->once())
+            ->method('execute')
+            ->with($customerId, $addressId)
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
+                        'Could Not Delete Example Entity as No Entity Exists with Id'
+                    )
+                )
+            );
+        $this->addressRepository->delete($customerId, $addressId);
+    }
+
+    /**
+     * Test update() successfully calls Update::execute and returns expected AddressSearchResults
+     */
+    public function testUpdate()
+    {
+        $customerId = 1;
+        $addressId = 1;
+        $this->updateCommand
+            ->expects($this->once())
+            ->method('execute')
+            ->with($customerId, $addressId)
+            ->willReturn($this->address);
+
+        $this->assertEquals(
+            $this->address,
+            $this->addressRepository->update($customerId, $addressId, $this->address)
+        );
+    }
+
+    public function testUpdateWithCouldNotSaveException()
+    {
+        $customerId = 1;
+        $addressId = 1;
+        $this->updateCommand
+            ->expects($this->once())
+            ->method('execute')
+            ->with($customerId, $addressId, $this->address)
+            ->willThrowException(
+                new CouldNotSaveException(
+                    __(
+                        'Could Not Update Address Entity'
+                    )
+                )
+            );
+        $this->addressRepository->update($customerId, $addressId, $this->address);
     }
 }
