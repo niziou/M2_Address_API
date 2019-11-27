@@ -7,15 +7,13 @@ declare(strict_types=1);
 
 namespace Mniziolek\ApiExtension\Model\Address\Command;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Customer\Api\Data\AddressInterface;
 
 interface DeleteInterface
 {
     /**
-     * @param int $customerId
-     * @param int $addressId
+     * @param AddressInterface $address
      * @return void
-     * @throws LocalizedException
      */
-    public function execute(int $customerId, int $addressId): void;
+    public function execute(AddressInterface $address): void;
 }

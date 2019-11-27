@@ -64,7 +64,9 @@ class AddressRepository implements AddressManagementInterface
 
     public function delete(int $customerId, int $addressId)
     {
-        return $this->deleteCommand->execute($customerId, $addressId);
+        $address = $this->get($customerId,$addressId);
+        $this->deleteCommand->execute($address);
+        return;
     }
 
     public function update(int $customerId, int $addressId, AddressInterface $addressData)
