@@ -24,7 +24,7 @@ use Mniziolek\ApiExtension\Api\Customer\AddressManagementInterface;
 
 
 /**
- * Class AddressManagement
+ * Class AddressManagement API Repository like access V1
  * @package Mniziolek\ApiExtension\Model\Customer
  */
 class AddressManagement implements AddressManagementInterface
