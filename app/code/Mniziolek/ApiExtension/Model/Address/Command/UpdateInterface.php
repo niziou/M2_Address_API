@@ -16,8 +16,8 @@ interface UpdateInterface
      * @param int $customerId
      * @param int $addressId
      * @param AddressInterface $addressData
-     * @return AddressInterface
+     * @return void
      * @throws LocalizedException
      */
-    public function execute(int $customerId, int $addressId, AddressInterface $addressData);
+    public function execute(int $customerId, int $addressId, AddressInterface $addressData): void;
 }

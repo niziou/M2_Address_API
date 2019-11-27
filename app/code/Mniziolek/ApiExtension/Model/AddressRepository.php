@@ -101,7 +101,7 @@ class AddressRepository implements CustomerAddressRepositoryInterface
      * @throws InputException
      * @throws LocalizedException
      */
-    public function create(int $customerId, AddressInterface $addressData)
+    public function create(int $customerId, AddressInterface $addressData): void
     {
         $this->createCommand->execute($customerId, $addressData);
         return;
@@ -114,7 +114,7 @@ class AddressRepository implements CustomerAddressRepositoryInterface
      * @param int $addressId
      * @throws NoSuchEntityException
      */
-    public function delete(int $customerId, int $addressId)
+    public function delete(int $customerId, int $addressId): void
     {
         $address = $this->get($customerId,$addressId);
         $this->deleteCommand->execute($address);
@@ -123,13 +123,16 @@ class AddressRepository implements CustomerAddressRepositoryInterface
 
     /**
      * Update customer address by entity Id
+     * @todo refactor: validation should be out
      * @param int $customerId
      * @param int $addressId
      * @param AddressInterface $addressData
      * @throws LocalizedException
      */
-    public function update(int $customerId, int $addressId, AddressInterface $addressData)
+    public function update(int $customerId, int $addressId, AddressInterface $addressData): void
     {
+        /** Get method checks if address belongs to customer */
+        $this->get($customerId,$addressId);
         $this->updateCommand->execute($customerId, $addressId, $addressData);
         return;
     }
