@@ -8,19 +8,31 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Mniziolek\ApiExtension\Api\Customer\AddressManagementInterface;
 use Mniziolek\ApiExtension\Model\Address\Query\GetInterface;
+use Mniziolek\ApiExtension\Model\Address\Command\CreateInterface;
 use Mniziolek\ApiExtension\Model\Address\Query\SearchInterface;
+use Mniziolek\ApiExtension\Model\Address\Command\UpdateInterface;
+use Mniziolek\ApiExtension\Model\Address\Command\DeleteInterface;
 
 class AddressRepository implements AddressManagementInterface
 {
     private $getQuery;
     private $searchQuery;
+    private $createCommand;
+    private $updateCommand;
+    private $deleteCommand;
     public function __construct(
         GetInterface $getQuery,
-        SearchInterface $searchQuery
+        SearchInterface $searchQuery,
+        CreateInterface $createCommand,
+        UpdateInterface $updateCommand,
+        DeleteInterface $deleteCommand
     )
     {
         $this->getQuery = $getQuery;
         $this->searchQuery = $searchQuery;
+        $this->createCommand = $createCommand;
+        $this->updateCommand = $updateCommand;
+        $this->deleteCommand = $deleteCommand;
     }
 
     /**
@@ -41,12 +53,12 @@ class AddressRepository implements AddressManagementInterface
         return $this->searchQuery->execute($customerId, $searchCriteria);
     }
 
-    public function create(int $customerId, AddressInterface $addressData): void
+    public function create(int $customerId, AddressInterface $addressData)
     {
         return $this->createCommand->execute($customerId, $addressData);
     }
 
-    public function delete(int $customerId, int $addressId): void
+    public function delete(int $customerId, int $addressId)
     {
         return $this->deleteCommand->execute($customerId, $addressId);
     }

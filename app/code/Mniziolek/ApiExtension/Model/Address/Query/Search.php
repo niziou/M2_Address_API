@@ -5,6 +5,7 @@ namespace Mniziolek\ApiExtension\Model\Address\Query;
 
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressSearchResultsInterface;
+use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
 use Magento\Customer\Api\Data\AddressSearchResultsInterfaceFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
