@@ -17,7 +17,7 @@ use Mniziolek\ApiExtension\Model\Address\Query\SearchInterface;
 use Mniziolek\ApiExtension\Model\Address\Command\UpdateInterface;
 use Mniziolek\ApiExtension\Model\Address\Command\DeleteInterface;
 
-class AddressRepository implements AddressManagementInterface
+class AddressRepository implements CustomerAddressRepositoryInterface
 {
     private $getQuery;
     private $searchQuery;
