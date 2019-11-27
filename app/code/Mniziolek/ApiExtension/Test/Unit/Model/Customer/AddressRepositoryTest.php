@@ -7,22 +7,19 @@ declare(strict_types=1);
 
 namespace Mniziolek\ApiExtension\Test\Unit\Model\Customer;
 
-use Assert\Assert;
-use Magento\Customer\Api\Data\AddressSearchResultsInterface;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Mniziolek\ApiExtension\Model\Address\Query\GetInterface;
-use Mniziolek\ApiExtension\Model\Address\Query\SearchInterface;
-use Mniziolek\ApiExtension\Model\Address\Command\DeleteInterface;
-use Mniziolek\ApiExtension\Model\Address\Command\CreateInterface;
-use Mniziolek\ApiExtension\Model\Address\Command\UpdateInterface;
-use Mniziolek\ApiExtension\Model\AddressRepository;
 use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Framework\Api\SearchCriteria;
+use Magento\Customer\Api\Data\AddressSearchResultsInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Mniziolek\ApiExtension\Model\Address\Command\CreateInterface;
+use Mniziolek\ApiExtension\Model\Address\Command\DeleteInterface;
+use Mniziolek\ApiExtension\Model\Address\Command\UpdateInterface;
+use Mniziolek\ApiExtension\Model\Address\Query\GetInterface;
+use Mniziolek\ApiExtension\Model\Address\Query\SearchInterface;
+use Mniziolek\ApiExtension\Model\AddressRepository;
 use PHPUnit\Framework\TestCase;
 
 class AddressRepositoryTest extends TestCase
@@ -129,7 +126,7 @@ class AddressRepositoryTest extends TestCase
     {
         $customerId = 1;
         $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)->getMock();
-        $this->searchQuery()
+        $this->searchQuery
             ->expects($this->once())
             ->method('execute')
             ->with($searchCriteria)
