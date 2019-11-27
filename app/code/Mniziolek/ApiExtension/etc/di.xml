@@ -1,5 +1,10 @@
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 	<preference for="Mniziolek\ApiExtension\Api\Customer\AddressManagementInterface" type="Mniziolek\ApiExtension\Model\Customer\AddressManagement"/>
-	<preference for="Mniziolek\ApiExtension\Api\CustomerAddressRepositoryInterface" type="Mniziolek\ApiExtension\Model\Customer\CustomerAddressRepository"/>
+	<preference for="Mniziolek\ApiExtension\Api\CustomerAddressRepositoryInterface" type="Mniziolek\ApiExtension\Model\AddressRepository"/>
+	<preference for="Mniziolek\ApiExtension\Model\Address\Command\CreateInterface" type="Mniziolek\ApiExtension\Model\Address\Command\Create"/>
+	<preference for="Mniziolek\ApiExtension\Model\Address\Command\UpdateInterface" type="Mniziolek\ApiExtension\Model\Address\Command\Update"/>
+	<preference for="Mniziolek\ApiExtension\Model\Address\Command\DeleteInterface" type="Mniziolek\ApiExtension\Model\Address\Command\Delete"/>
+	<preference for="Mniziolek\ApiExtension\Model\Address\Query\GetInterface" type="Mniziolek\ApiExtension\Model\Address\Query\Get"/>
+	<preference for="Mniziolek\ApiExtension\Model\Address\Query\SearchInterface" type="Mniziolek\ApiExtension\Model\Address\Query\Search"/>
 </config>
