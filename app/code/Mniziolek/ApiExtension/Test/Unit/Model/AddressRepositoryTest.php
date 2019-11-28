@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Mniziolek\ApiExtension\Test\Unit\Model\Customer;
+namespace Mniziolek\ApiExtension\Test\Unit\Model;
 
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressSearchResultsInterface;
