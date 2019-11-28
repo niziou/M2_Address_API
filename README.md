@@ -7,9 +7,6 @@
 ## Table of Contents
 
 - [Installation](#installation)
-- [Features](#features)
-- [Contributing](#contributing)
-- [Team](#team)
 - [FAQ](#faq)
 - [Support](#support)
 - [License](#license)
@@ -37,42 +34,17 @@ in MYMAGENTO2 dir:
 
 php bin/magento setup:install --base-url=http://test-m2.loc --db-host=db --db-name=magento --db-user=magento --admin-firstname=Magento --admin-lastname=User --admin-email=my@email.com --admin-user=admin --admin-password=password123 --language=en_US --currency=USD --timezone=Europe/Warsaw --use-rewrites=1 --backend-frontname=admin
 
-### Clone
-
-
 
 ### Setup
 
 /composer install
 
 php bin/magento setup:install --base-url=http://test-m2.loc --db-host=db --db-name=magento --db-user=magento --admin-firstname=Magento --admin-lastname=User --admin-email=my@email.com --admin-user=admin --admin-password=password123 --language=en_US --currency=USD --timezone=Europe/Warsaw --use-rewrites=1 --backend-frontname=admin
-
-### Clone
----
-
-## Features
-## Usage (Optional)
-## Documentation (Optional)
-## Tests (Optional)
-
-- Going into more detail on code and technologies used
-- I utilized this nifty <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">Markdown Cheatsheet</a> for this sample `README`.
-
----
-
-## Team
-
----
-
 ## FAQ
 
 ---
 
 ## Support
-
----
-
-## Donations (Optional)
 
 ---
 
