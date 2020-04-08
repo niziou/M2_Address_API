@@ -3,7 +3,7 @@
  * @package Mniziolek_ApiExtension
  * @author Mateusz Niziołek <mateusz.niziolek@gmail.com>
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Mniziolek\ApiExtension\Test\Unit\Model;
 
@@ -28,30 +28,37 @@ class AddressRepositoryTest extends TestCase
      * @var AddressInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     private $address;
+
     /**
      * @var AddressRepository
      */
     private $addressRepository;
+
     /**
      * @var GetInterface
      */
     private $getQuery;
+
     /**
      * @var SearchInterface
      */
     private $searchQuery;
+
     /**
      * @var DeleteInterface
      */
     private $deleteCommand;
+
     /**
      * @var CreateInterface
      */
     private $createCommand;
+
     /**
      * @var UpdateInterface
      */
     private $updateCommand;
+
     /**
      * @var AddressSearchResultsInterface
      */
@@ -83,6 +90,7 @@ class AddressRepositoryTest extends TestCase
 
     /**
      * Test that get() will successfully call Get::execute() and return expected Object
+     *
      * @throws NoSuchEntityException
      */
     public function testGet()

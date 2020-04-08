@@ -3,16 +3,17 @@
  * @package Mniziolek_ApiExtension
  * @author Mateusz Niziołek <mateusz.niziolek@gmail.com>
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Mniziolek\ApiExtension\Model\Address\Command;
 
-use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class Create
+ *
  * @package Mniziolek\ApiExtension\Model\Address\Command
  */
 class Create implements CreateInterface
@@ -24,18 +25,19 @@ class Create implements CreateInterface
 
     /**
      * Create constructor.
+     *
      * @param AddressRepositoryInterface $addressRepository
      */
     public function __construct(
         AddressRepositoryInterface $addressRepository
-    )
-    {
+    ) {
         $this->addressRepository = $addressRepository;
     }
 
     /**
      * @param int $customerId
      * @param AddressInterface $addressData
+     *
      * @return void
      * @throws LocalizedException
      */
@@ -43,6 +45,7 @@ class Create implements CreateInterface
     {
         $addressData->setCustomerId($customerId);
         $this->addressRepository->save($addressData);
+
         return;
     }
 }
