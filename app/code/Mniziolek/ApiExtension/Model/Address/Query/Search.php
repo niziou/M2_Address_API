@@ -3,14 +3,14 @@
  * @package Mniziolek_ApiExtension
  * @author Mateusz Niziołek <mateusz.niziolek@gmail.com>
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Mniziolek\ApiExtension\Model\Address\Query;
 
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressSearchResultsInterface;
-use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
 use Magento\Customer\Api\Data\AddressSearchResultsInterfaceFactory;
+use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -21,25 +21,28 @@ class Search implements SearchInterface
      * @var AddressSearchResultsInterfaceFactory
      */
     protected $addressSearchResultsFactory;
+
     /**
      * @var CollectionFactory
      */
     protected $addressCollectionFactory;
-    /**
-     * @var CollectionProcessorInterface
-     */
-    private $collectionProcessor;
+
     /**
      * @var JoinProcessorInterface
      */
     protected $extensionAttributesJoinProcessor;
+
+    /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
     public function __construct(
         AddressSearchResultsInterfaceFactory $addressSearchResultsFactory,
         CollectionFactory $addressCollectionFactory,
         CollectionProcessorInterface $collectionProcessor,
         JoinProcessorInterface $extensionAttributesJoinProcessor
-    )
-    {
+    ) {
         $this->addressSearchResultsFactory = $addressSearchResultsFactory;
         $this->addressCollectionFactory = $addressCollectionFactory;
         $this->collectionProcessor = $collectionProcessor;
@@ -54,7 +57,7 @@ class Search implements SearchInterface
             AddressInterface::class
         );
         /** No search criteria object passed */
-        if($searchCriteria === null) {
+        if ($searchCriteria === null) {
             $collection->addFieldToFilter('parent_id', $customerId);
         } else {
             $this->collectionProcessor->process($searchCriteria, $collection);
@@ -68,10 +71,11 @@ class Search implements SearchInterface
         /** @var \Magento\Customer\Api\Data\AddressSearchResultsInterface $searchResults */
         $searchResults = $this->addressSearchResultsFactory->create();
         $searchResults->setItems($addresses);
-        if($searchCriteria != null) {
+        if ($searchCriteria != null) {
             $searchResults->setSearchCriteria($searchCriteria);
         }
         $searchResults->setTotalCount($collection->getSize());
+
         return $searchResults;
     }
 }

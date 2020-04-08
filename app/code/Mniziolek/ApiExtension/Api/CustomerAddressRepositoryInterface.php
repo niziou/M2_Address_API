@@ -3,7 +3,7 @@
  * @package Mniziolek_ApiExtension
  * @author Mateusz Niziołek <mateusz.niziolek@gmail.com>
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Mniziolek\ApiExtension\Api;
 
@@ -20,13 +20,18 @@ interface CustomerAddressRepositoryInterface
     /**
      * @param int $customerId
      * @param SearchCriteriaInterface|null $searchCriteria
+     *
      * @return AddressSearchResultsInterface
      */
-    public function search(int $customerId, SearchCriteriaInterface $searchCriteria = null): AddressSearchResultsInterface;
+    public function search(
+        int $customerId,
+        SearchCriteriaInterface $searchCriteria = null
+    ): AddressSearchResultsInterface;
 
     /**
      * @param int $customerId
      * @param int $addressId
+     *
      * @return AddressInterface
      * @throws AuthorizationException
      * @throws LocalizedException
@@ -36,6 +41,7 @@ interface CustomerAddressRepositoryInterface
     /**
      * @param int $customerId
      * @param AddressInterface $addressData
+     *
      * @return void
      * @throws InputException
      */
@@ -45,6 +51,7 @@ interface CustomerAddressRepositoryInterface
      * @param int $customerId
      * @param int $addressId
      * @param AddressInterface $addressData
+     *
      * @return void
      * @throws NoSuchEntityException
      * @throws InputException
@@ -54,9 +61,10 @@ interface CustomerAddressRepositoryInterface
     /**
      * @param int $customerId
      * @param int $addressId
-     * @throws NoSuchEntityException
-     * @throws LocalizedException
+     *
      * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function delete(int $customerId, int $addressId);
 }

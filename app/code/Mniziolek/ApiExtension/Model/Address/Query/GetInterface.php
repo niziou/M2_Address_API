@@ -3,7 +3,7 @@
  * @package Mniziolek_ApiExtension
  * @author Mateusz Niziołek <mateusz.niziolek@gmail.com>
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Mniziolek\ApiExtension\Model\Address\Query;
 
@@ -17,6 +17,7 @@ interface GetInterface
      *
      * @param int $customerId
      * @param int $addressId
+     *
      * @return AddressInterface;
      * @throws NoSuchEntityException
      */

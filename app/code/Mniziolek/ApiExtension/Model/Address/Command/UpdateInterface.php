@@ -3,7 +3,7 @@
  * @package Mniziolek_ApiExtension
  * @author Mateusz Niziołek <mateusz.niziolek@gmail.com>
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Mniziolek\ApiExtension\Model\Address\Command;
 
@@ -16,6 +16,7 @@ interface UpdateInterface
      * @param int $customerId
      * @param int $addressId
      * @param AddressInterface $addressData
+     *
      * @return void
      * @throws LocalizedException
      */
